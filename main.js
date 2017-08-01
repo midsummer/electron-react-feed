@@ -17,21 +17,21 @@ function createWindow () {
         mainWindow = null;
     });
 
-    //dialog.showOpenDialog({
-    //    properties: ['openFile'],
-    //    filters: [
-    //        {
-    //            name: 'RSS',
-    //            extensions: ['rss', 'xml']
-    //        }
-    //    ]
-    //}, (filePaths) => {
-    //    if(filePaths === undefined) return;
-    //    fs.readFile(filePaths[0], 'utf-8', (error, data) => {
-    //        if(error) return;
-    //        mainWindow.webContents.send('rss', data)
-    //    });
-    //});
+    dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            {
+                name: 'RSS',
+                extensions: ['rss', 'xml']
+            }
+        ]
+    }, (filePaths) => {
+        if(filePaths === undefined) return;
+        fs.readFile(filePaths[0], 'utf-8', (error, data) => {
+            if(error) return;
+            mainWindow.webContents.send('rss', data)
+        });
+    });
 }
 
 app.on('ready', createWindow);
