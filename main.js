@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {app, dialog, BrowserWindow} = electron;
+const {app, dialog, BrowserWindow, Menu} = electron;
 
 const path = require('path');
 const url = require('url');
@@ -11,27 +11,27 @@ function createWindow () {
     mainWindow = new BrowserWindow({width: 800, height: 600});
     mainWindow.loadURL('file://' + __dirname + '/public/built/index.html');
 
-    mainWindow.openDevTools();
-
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
 
-    dialog.showOpenDialog({
-        properties: ['openFile'],
-        filters: [
+    let template = [
             {
-                name: 'RSS',
-                extensions: ['rss', 'xml']
+                label: 'File',
+                submenu: [
+                    {
+                        label: 'Open',
+                        click: () => { showOpen(); }
+                    }, {
+                        label: 'Exit',
+                        click: () => { app.quit(); }
+                    }
+                ]
             }
-        ]
-    }, (filePaths) => {
-        if(filePaths === undefined) return;
-        fs.readFile(filePaths[0], 'utf-8', (error, data) => {
-            if(error) return;
-            mainWindow.webContents.send('rss', data)
-        });
-    });
+        ],
+        menu = Menu.buildFromTemplate(template);
+
+    Menu.setApplicationMenu(menu);
 }
 
 app.on('ready', createWindow);
@@ -50,5 +50,22 @@ app.on('activate', function () {
 
 app.on('open-file', function(event) {
     event.preventDefault();
-
 });
+
+let showOpen = function() {
+    dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            {
+                name: 'RSS',
+                extensions: ['rss', 'xml']
+            }
+        ]
+    }, (filePaths) => {
+        if(filePaths === undefined) return;
+        fs.readFile(filePaths[0], 'utf-8', (error, data) => {
+            if(error) return;
+            mainWindow.webContents.send('rss', data)
+        });
+    });
+};

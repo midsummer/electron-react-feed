@@ -1,11 +1,11 @@
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: ['webpack/hot/dev-server', './scripts/entry.js']
+        app: ['webpack/hot/dev-server', './src/index.js']
     },
+    context: __dirname,
     output: {
         path: __dirname + '/public/built',
         filename: '[name].js',
@@ -38,5 +38,5 @@ module.exports = {
             inject: 'body'
         })
     ],
-    target: 'node'
+    target: 'electron-renderer'
 };
