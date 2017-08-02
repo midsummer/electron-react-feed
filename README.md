@@ -15,6 +15,7 @@
     $ nmp run server
 
 4) Start electron
+
     $ nmp start
 
 -------
