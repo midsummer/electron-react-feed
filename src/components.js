@@ -59,9 +59,11 @@ class RSSNode extends React.Component {
 }
 
 const parseXML = (xmlText) => {
+    let formattedText = xmlText.replace(/(\r\n|\n|\r)/gm, "");
+
     try {
         let xmlParser = new XMLParser();
-        return xmlParser.parseFromString(xmlText);
+        return xmlParser.parseFromString(formattedText);
     } catch(error) {
         console.log(error);
     }
